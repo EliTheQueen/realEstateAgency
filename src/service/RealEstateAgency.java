@@ -1,10 +1,7 @@
 package service;
 
 import data.HashUtil;
-import model.Contract;
-import model.ContractType;
-import model.House;
-import model.User;
+import model.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -154,7 +151,7 @@ public class RealEstateAgency implements Serializable {
             return null;
         }
 
-        User newUser = new User(username, password, budget,  User.UserRole.NORMAL);
+        User newUser = new User(username, password, budget, UserRole.NORMAL);
 
         users.add(newUser);
 
@@ -172,7 +169,7 @@ public class RealEstateAgency implements Serializable {
             return null;
         }
 
-        if (user.getRole() == User.UserRole.AGENCY) {
+        if (user.getRole() == UserRole.AGENCY) {
             System.out.println("Agency cannot log in.");
             return null;
         }
@@ -311,7 +308,7 @@ public class RealEstateAgency implements Serializable {
 
         contracts.add(contract);
 
-        if (owner != null && owner.getRole() != User.UserRole.AGENCY) {
+        if (owner != null && owner.getRole() != UserRole.AGENCY) {
             owner.setBudget(owner.getBudget() + rentPrice);
         }
 
@@ -398,7 +395,7 @@ public class RealEstateAgency implements Serializable {
 
         for (User user : users) {
 
-            if (user.getRole() == User.UserRole.AGENCY) {
+            if (user.getRole() == UserRole.AGENCY) {
                 return user;
             }
         }

@@ -10,24 +10,19 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public enum UserRole {
-        NORMAL,
-        AGENCY
-    }
-
     private int id;
     private String username;
     private String passwordHash;
     private double budget;
     private static int nextId = 1;
-    private UserRole role;
+    private String role;
 
 
     private List<Integer> ownedHouses;
     private List<Integer> rentedHouses;
     private List<Integer> contracts;
 
-    public User(String username, String password, double budget, UserRole role) {
+    public User(String username, String password, double budget, String role) {
         this.id = nextId++;
         this.username = username;
         this.passwordHash = HashUtil.hashPassword(password);
@@ -60,12 +55,12 @@ public class User implements Serializable {
     }
 
     public void setBudget(double budget) {
-        if (role != UserRole.AGENCY) {
+        if (!role.equals(UserRole.AGENCY)) {
             this.budget = budget;
         }
     }
 
-    public UserRole getRole() {
+    public String getRole() {
         return role;
     }
 
