@@ -2,6 +2,7 @@ package service;
 
 import data.HashUtil;
 import model.Contract;
+import model.ContractType;
 import model.House;
 import model.User;
 
@@ -237,7 +238,7 @@ public class RealEstateAgency implements Serializable {
                 house.getId(),
                 buyer.getId(),
                 sellerId,
-                Contract.ContractType.SALE,
+                ContractType.SALE,
                 price
         );
 
@@ -304,7 +305,7 @@ public class RealEstateAgency implements Serializable {
                 house.getId(),
                 renter.getId(),
                 ownerId,
-                Contract.ContractType.RENT,
+                ContractType.RENT,
                 rentPrice
         );
 
@@ -378,7 +379,7 @@ public class RealEstateAgency implements Serializable {
                 houseId,
                 agency.getId(),
                 seller.getId(),
-                Contract.ContractType.INSTANT_SALE,
+                ContractType.INSTANT_SALE,
                 instantPrice
         );
 
@@ -447,7 +448,7 @@ public class RealEstateAgency implements Serializable {
                 houseId,
                 buyerId,
                 (currentOwner != null) ? currentOwner.getId() : -1,
-                Contract.ContractType.SPECIAL_BUY,
+                ContractType.SPECIAL_BUY,
                 specialPrice
         );
         contracts.add(contract);
@@ -473,7 +474,7 @@ public class RealEstateAgency implements Serializable {
     public void cancelContract(int contractId, User user) {
 
         Contract c =  findContractById(contractId);
-        if (c.getType() != Contract.ContractType.RENT) {
+        if (c.getType() != ContractType.RENT) {
             System.out.println("You can't cancel this contract!");
             return;
         }
@@ -503,7 +504,7 @@ public class RealEstateAgency implements Serializable {
 
         findUserById(c.getSellerId()).removeContract(contractId);
 
-        c.setType(Contract.ContractType.CANCEL);
+        c.setType(ContractType.CANCEL);
 
         System.out.println("Canceled this contract!");
     }

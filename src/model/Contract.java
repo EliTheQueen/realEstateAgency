@@ -2,7 +2,6 @@ package model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Contract implements Serializable {
 
@@ -15,16 +14,10 @@ public class Contract implements Serializable {
     private int buyerId;
     private int sellerId;
     private double price;
-    public enum ContractType {
-        SALE,
-        RENT,
-        INSTANT_SALE,
-        SPECIAL_BUY,
-        CANCEL
-    }
-    private ContractType type;
 
-    public Contract(int houseId, int buyerId, int sellerId, ContractType type, double price) {
+    private String type;
+
+    public Contract(int houseId, int buyerId, int sellerId, String  type, double price) {
 
         this.contractId = nextId++;
         this.houseId = houseId;
@@ -51,11 +44,11 @@ public class Contract implements Serializable {
         return sellerId;
     }
 
-    public ContractType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ContractType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
