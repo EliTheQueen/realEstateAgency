@@ -10,9 +10,9 @@ public class Penthouse extends House{
     protected static final double Terrace_Price_Per_Meter = BASE_PRICE_PER_METER * 0.8;
     protected static final double Pool_Value = 1_000_000_000;
 
-    public Penthouse(int id, double area, int region, String ownerName, String renterName, boolean forSale, boolean forRent, double terraceArea, boolean hasPool, int floorNumber) {
+    public Penthouse(double area, int region, String ownerName, String renterName, boolean forSale, boolean forRent, double terraceArea, boolean hasPool, int floorNumber) {
 
-        super(id, area, region, ownerName, renterName, forSale, forRent);
+        super(area, region, ownerName, renterName, forSale, forRent);
 
         this.terraceArea = terraceArea;
         this.hasPool = hasPool;
@@ -37,6 +37,6 @@ public class Penthouse extends House{
 
     @Override
     public String toString() {
-        return super.toString() + ", Terrace_Area: " + terraceArea + ", Has Pool: " + hasPool() + ", Floor: " + floorNumber;
+        return "Penthouse: " + super.toString() + ", Terrace_Area: " + terraceArea + ", Has Pool: " + hasPool() + ", Floor: " + floorNumber;
     }
 }

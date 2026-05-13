@@ -1,8 +1,8 @@
-import model.House;
-import model.Penthouse;
-import model.Villa;
-import model.RealEstateAgency;
-import model.Apartment;
+import data.DataManager;
+import model.*;
+import service.RealEstateAgency;
+import ui.CLI;
+
 import java.util.ArrayList;
 
 public class Main {
@@ -10,14 +10,27 @@ public class Main {
 
         RealEstateAgency system = new RealEstateAgency();
 
-        House v = new Villa(1, 350, 1, "Ali", "", true, false, 200, 5);
+        CLI cli = new CLI(system);
 
-        House p = new Penthouse(2, 180, 2, "Sara", "", true, false, 80, true, 12);
+        ArrayList<House> loadedHouses = DataManager.loadHouses("houses.dat");
+        for (House h : loadedHouses) {
+            system.addHouse(h);
+        }
+        House.updateId(loadedHouses);
 
-        system.addHouse(v);
-        system.addHouse(p);
+        ArrayList<User> loadedUsers = DataManager.loadUsers("users.dat");
+        for (User user : loadedUsers) {
+            system.addUser(user);
+        }
+        User.updateNextId(loadedUsers);
 
-        system.showAllHouses();
+        ArrayList<Contract> loadedContracts = DataManager.loadContracts("contracts.dat");
+        for (Contract contract : loadedContracts) {
+            system.addContract(contract);
+        }
+        Contract.updateNextId(loadedContracts);
+
+        cli.start();
+
     }
-
 }

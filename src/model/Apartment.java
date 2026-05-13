@@ -5,9 +5,9 @@ public class Apartment extends House {
     private int bedrooms;
     private int floor;
 
-    public Apartment(int id, double area, int region, String ownerName, String renterName, boolean forSale, boolean forRent, int bedrooms, int floor) {
+    public Apartment(double area, int region, String ownerName, String renterName, boolean forSale, boolean forRent, int bedrooms, int floor) {
 
-        super(id, area, region, ownerName, renterName,forSale, forRent);
+        super (area, region, ownerName, renterName, forSale, forRent);
 
         this.bedrooms = bedrooms;
         this.floor = floor;
@@ -25,6 +25,6 @@ public class Apartment extends House {
 
     @Override
     public String toString() {
-        return super.toString() + "Bedrooms: " + bedrooms + ", Floor: " + floor;
+        return "Apartment: " + super.toString() + ", Bedrooms: " + bedrooms + ", Floor: " + floor;
     }
 }

@@ -1,6 +1,11 @@
 package model;
 
-public abstract class House {
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public abstract class House implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private int id;
     private double area;
@@ -12,9 +17,10 @@ public abstract class House {
 
     protected static final double BASE_PRICE_PER_METER = 10_000_000;
     protected static final double RENT_RATE = 0.004;
+    private static int Id = 1;
 
-    public House(int id, double area, int region, String ownerName, String renterName, boolean forSale, boolean forRent) {
-        this.id = id;
+    public House(double area, int region, String ownerName, String renterName, boolean forSale, boolean forRent) {
+        this.id = Id++;
         this.area = area;
         this.region = region;
         this.ownerName = ownerName;
@@ -30,8 +36,11 @@ public abstract class House {
     public String getRenterName() { return renterName; }
     public boolean isForSale() { return forSale; }
     public boolean isForRent() { return forRent; }
+    public void setOwnerName(String ownerName) { this.ownerName = ownerName; }
+    public void setForSale(boolean forSale) { this.forSale = forSale; }
+    public void setForRent(boolean forRent) { this.forRent = forRent; }
+    public void setRenterName(String renterName) { this.renterName = renterName; }
 
-    public void setReneterName(String renterName) { this.renterName = renterName; }
 
     public abstract double calculatePrice();
 
@@ -48,6 +57,16 @@ public abstract class House {
 
     public double calculateMonthlyRent() {
         return calculatePrice() * RENT_RATE;
+    }
+
+    public static void updateId(ArrayList<House> houses) {
+        int max = 0;
+        for (House house : houses) {
+            if (house.getId() > max) {
+                max = house.getId();
+            }
+        }
+        Id = max + 1;
     }
 
     @Override
