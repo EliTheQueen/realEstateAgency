@@ -3,8 +3,6 @@ package ui;
 import data.DataManager;
 import model.*;
 import service.RealEstateAgency;
-
-import java.math.BigDecimal;
 import java.util.Scanner;
 
 public class CLI {
@@ -432,6 +430,7 @@ public class CLI {
             return;
         }
         chooseHouse();
+
     }
 
     private void searchHouseById() {
