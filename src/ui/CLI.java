@@ -309,10 +309,26 @@ public class CLI {
             System.out.println("Invalid input");
             return;
         }
-        int bedrooms = readInt("Bedrooms: ");
+
+        int bedrooms;
+
+        do {
+            bedrooms = readInt("Bedrooms: ");
+
+            if (bedrooms <= 0) {
+                System.out.println("Bedrooms must be greater than 0.");
+            }
+        } while (bedrooms <= 0);
 
 
-        int floor = readInt("Floor: ");
+        int floor;
+
+        do {
+            floor = readInt("Floor: ");
+            if (floor <= 0) {
+                System.out.println("Floor must be greater than 0.");
+            }
+        }  while (floor <= 0);
 
 
         House apartment = new Apartment(
@@ -345,10 +361,25 @@ public class CLI {
             System.out.println("Invalid input");
             return;
         }
-        double yard = readDouble("Yard Area: ");
+        double yard;
+
+        do {
+            yard = readDouble("Yard Area: ");
+            if (yard <= 0) {
+                System.out.println("Yard must be greater than 0.");
+            }
+
+        }  while (yard <= 0);
 
 
-        int floors = readInt("Floors: ");
+        int floors;
+
+        do {
+            floors = readInt("Floors: ");
+            if (floors <= 0) {
+                System.out.println("Floors must be greater than 0.");
+            }
+        }   while (floors <= 0);
 
 
         House villa = new Villa(
@@ -378,12 +409,25 @@ public class CLI {
             System.out.println("Invalid input");
             return;
         }
-        double terraceArea = readDouble("Terrace Area: ");
+        double terraceArea;
+
+        do {
+            terraceArea = readDouble("Terrace Area: ");
+            if (terraceArea <= 0) {
+                System.out.println("Terrace must be greater than 0.");
+            }
+        } while (terraceArea <= 0);
 
         boolean hasPool = readBoolean("Has Pool? (Enter true for yes and false for no) ");
 
+        int floorNumber;
 
-        int floorNumber = readInt("Floor Number: ");
+        do {
+            floorNumber = readInt("Floor: ");
+            if (floorNumber <= 0) {
+                System.out.println("Floor must be greater than 0.");
+            }
+        }  while (floorNumber <= 0);
 
         House penthouse = new Penthouse(
                 info.getArea(),
@@ -530,7 +574,14 @@ public class CLI {
         if (backToPreviousMenu(houseId)) {
             return;
         }
-        System.out.println(system.findHouseById(houseId));
+
+        House house = system.findHouseById(houseId);
+
+        if (house != null) {
+            System.out.println("House not found.");
+        }
+
+        System.out.println(house);
     }
 
     private void instantSell() {
