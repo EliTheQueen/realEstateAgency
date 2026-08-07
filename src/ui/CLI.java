@@ -413,11 +413,17 @@ public class CLI {
         System.out.print("Password: ");
         String password = scanner.next();
 
+        System.out.print("Confirm password: ");
+        String confirmation = scanner.next();
+
+        if (!password.equals(confirmation)) {
+            System.out.println("Passwords do not match.");
+            return;
+        }
 
         double budget;
 
         while (true) {
-
             budget = readDouble("Budget: ");
 
             if (budget >= 0) {
@@ -426,7 +432,6 @@ public class CLI {
 
             System.out.println("Budget cannot be negative.");
         }
-
 
         User user = system.signUp(username, password, budget);
 
