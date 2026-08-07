@@ -2,6 +2,8 @@ package model;
 
 public class Apartment extends House {
 
+    private static final long serialVersionUID = 1L;
+
     private int bedrooms;
     private int floor;
 

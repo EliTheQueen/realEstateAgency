@@ -203,9 +203,7 @@ public class CLI {
         List<Integer>  list = Arrays.asList(1, 2, 3);
         if (!list.contains(type)) {
             System.out.println("Invalid type");
-            if (backToPreviousMenu(0)) {
-                return;
-            }
+            return;
         }
         if (backToPreviousMenu(type)) {
             return;

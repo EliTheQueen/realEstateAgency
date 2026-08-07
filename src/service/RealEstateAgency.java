@@ -464,12 +464,13 @@ public class RealEstateAgency implements Serializable {
     public void cancelContract(int contractId, User user) {
 
         Contract c = findContractById(contractId);
-        if (!c.getType().equals(ContractType.RENT)) {
-            System.out.println("You can't cancel this contract!");
-            return;
-        }
+
         if (c == null) {
             System.out.println("Contract not found.");
+            return;
+        }
+        if (!c.getType().equals(ContractType.RENT)) {
+            System.out.println("You can't cancel this contract!");
             return;
         }
         if (c.getBuyerId() != user.getId()) {
@@ -484,7 +485,11 @@ public class RealEstateAgency implements Serializable {
             return;
         }
 
+        User otherParty = findUserById(c.getSellerId());
+
         user.setBudget(user.getBudget() - penalty);
+
+        otherParty.setBudget(otherParty.getBudget() + penalty);
 
         h.setRenterName("");
 

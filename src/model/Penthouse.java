@@ -2,6 +2,8 @@ package model;
 
 public class Penthouse extends House{
 
+    private static final long serialVersionUID = 1L;
+
     private double terraceArea;
     private boolean hasPool;
     private int floorNumber;

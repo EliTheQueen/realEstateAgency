@@ -2,11 +2,13 @@ package model;
 
 public class Villa extends House {
 
+    private static final long serialVersionUID = 1L;
+
     private double yardArea;
     private int floors;
 
-    protected static double YARD_PRICE_PER_METER = BASE_PRICE_PER_METER * 0.5;
-    protected static double FLOOR_PREMIUM = BASE_PRICE_PER_METER * 20;
+    protected static final double YARD_PRICE_PER_METER = BASE_PRICE_PER_METER * 0.5;
+    protected static final double FLOOR_PREMIUM = BASE_PRICE_PER_METER * 20;
 
     public Villa(double area, int region, String ownerName, String renterName, boolean forSale, boolean forRent, double yardArea, int floors) {
 
