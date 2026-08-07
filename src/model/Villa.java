@@ -28,6 +28,6 @@ public class Villa extends House {
 
     @Override
     public String toString() {
-        return " Villa: " + super.toString() + ", Yard Area: " + yardArea + ", Floors: " + floors;
+        return "Villa: " + super.toString() + ", Yard Area: " + yardArea + ", Floors: " + floors;
     }
 }

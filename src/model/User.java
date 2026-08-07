@@ -5,6 +5,7 @@ import data.HashUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import java.util.Objects;
 
 public class User implements Serializable {
 
@@ -27,7 +28,7 @@ public class User implements Serializable {
         this.username = username;
         this.passwordHash = HashUtil.hashPassword(password);
         this.role = role;
-        if (role == UserRole.AGENCY) {
+        if (Objects.equals(role, UserRole.AGENCY)) {
             this.budget = 0;
         } else {
             this.budget = budget;

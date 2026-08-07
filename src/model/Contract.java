@@ -73,7 +73,7 @@ public class Contract implements Serializable {
                 ", Buyer ID: " + buyerId +
                 ", Seller ID: " + sellerId +
                 ", Type: " + type +
-                ", Price: " + price;
+                ", Price: " + String.format("%.2f", price);
     }
 
 

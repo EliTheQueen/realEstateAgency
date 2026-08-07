@@ -3,6 +3,9 @@ package ui;
 import data.DataManager;
 import model.*;
 import service.RealEstateAgency;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class CLI {
@@ -23,7 +26,7 @@ public class CLI {
             if(currentUser == null){
                 showLoginMenu();
 
-                int choice = scanner.nextInt();
+                int choice = readInt("Choice: ");
 
                 switch (choice) {
                     case 1:
@@ -47,7 +50,7 @@ public class CLI {
             } else {
                 showMainMenu();
 
-                int choice = scanner.nextInt();
+                int choice = readInt("Choice: ");
 
                 switch (choice) {
 
@@ -67,9 +70,18 @@ public class CLI {
                         myOwnedHouse();
                         break;
 
-                    case 13:
-                        addHouse();
-                        saveData();
+                    case 5:
+                        myRentedHouse();
+                        break;
+
+                    case 6:
+                        System.out.printf("My Budget: %.2f",
+                                currentUser.getBudget());
+                        break;
+
+                    case 7:
+                        myContracts();;
+                        chooseContract();
                         break;
 
                     case 8:
@@ -87,13 +99,6 @@ public class CLI {
                         chooseHouse();
                         break;
 
-
-
-                    case 20:
-                        System.out.println("Bye Bye!");
-                        saveData();
-                        return;
-
                     case 11:
                         buyHouse();
                         saveData();
@@ -104,19 +109,23 @@ public class CLI {
                         saveData();
                         break;
 
-                    case 6:
-                        System.out.printf("My Budget: %.2f",
-                                currentUser.getBudget());
+                    case 13:
+                        addHouse();
+                        saveData();
                         break;
 
-                    case 5:
-                        myRentedHouse();
+                    case 14:
+                        saleHouse();
+                        saveData();
                         break;
 
+                    case 15:
+                        forRentHouse();
+                        saveData();
+                        break;
 
-
-                    case 19:
-                        currentUser = null;
+                    case 17:
+                        cancelContract();
                         saveData();
                         break;
 
@@ -130,26 +139,15 @@ public class CLI {
                         saveData();
                         break;
 
-                    case 7:
-                        myContracts();
-                        break;
-
-
-
-                    case 17:
-                        cancelContract();
+                    case 19:
+                        currentUser = null;
                         saveData();
                         break;
 
-                    case 14:
-                        saleHouse();
+                    case 20:
+                        System.out.println("Bye Bye!");
                         saveData();
-                        break;
-
-                    case 15:
-                        forRentHouse();
-                        saveData();
-                        break;
+                        return;
 
                     default:
                         System.out.println("Invalid option");
@@ -186,14 +184,12 @@ public class CLI {
         System.out.println("19. Log Out");
         System.out.println("20. Exit");
 
-        System.out.print("Choice: ");
     }
     private void showLoginMenu() {
         System.out.println("\n===== ✩Queen✩ Real Estate System =====");
         System.out.println("1. Sign Up");
         System.out.println("2. Log In");
         System.out.println("3. Exit");
-        System.out.print("Choice: ");
 
     }
 
@@ -203,9 +199,17 @@ public class CLI {
         System.out.println("2 Villa");
         System.out.println("3 Penthouse");
 
-        System.out.print("Type: ");
-
-        int type = scanner.nextInt();
+        int type = readInt("Type: (0 to back)");
+        List<Integer>  list = Arrays.asList(1, 2, 3);
+        if (!list.contains(type)) {
+            System.out.println("Invalid type");
+            if (backToPreviousMenu(0)) {
+                return;
+            }
+        }
+        if (backToPreviousMenu(type)) {
+            return;
+        }
 
         switch (type) {
             case 1:
@@ -225,42 +229,99 @@ public class CLI {
 
     private BaseHouseInfo getBaseInformation() {
 
-        BaseHouseInfo info = new BaseHouseInfo();
+        double area;
+        int region;
+        boolean sale;
+        boolean rent;
 
-        System.out.print("Area: ");
-        info.area = scanner.nextDouble();
+        while (true) {
+            System.out.print("Area: ");
 
-        System.out.print("Region: ");
-        info.region = scanner.nextInt();
+            if (scanner.hasNextDouble()) {
+                area = scanner.nextDouble();
 
-        System.out.print("Is it for sale? ");
-        String s = scanner.next();
-        info.sale = s.equalsIgnoreCase("yes");
+                if (area > 0) {
+                    break;
+                } else {
+                    System.out.println("Area must be greater than 0.");
+                }
 
-        System.out.print("Is it for rent? ");
-        String r = scanner.next();
-        info.rent = r.equalsIgnoreCase("yes");
+            } else {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.next();
+            }
+        }
 
-        return info;
+        while (true) {
+            System.out.print("Region (1-4): ");
+
+            if (scanner.hasNextInt()) {
+                region = scanner.nextInt();
+
+                if (region > 0 && region < 5) {
+                    break;
+                } else {
+                    System.out.println("Invalid region. Enter a number between 0 and 5.");
+                }
+
+            } else {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next();
+            }
+        }
+
+        while (true) {
+            System.out.print("Is it for sale? (yes/no): ");
+
+            String s = scanner.next().trim().toLowerCase();
+
+            if (s.equals("yes") || s.equals("no")) {
+                sale = s.equals("yes");
+                break;
+            } else {
+                System.out.println("Please enter yes or no.");
+            }
+        }
+
+        while (true) {
+            System.out.print("Is it for rent? (yes/no): ");
+
+            String r = scanner.next().trim().toLowerCase();
+
+            if (r.equals("yes") || r.equals("no")) {
+                rent = r.equals("yes");
+                break;
+            } else {
+                System.out.println("Please enter yes or no.");
+            }
+        }
+
+        return new BaseHouseInfo(area, region, sale, rent);
+
     }
+
 
     private void addApartment() {
 
         BaseHouseInfo info = getBaseInformation();
 
-        System.out.print("Bedrooms: ");
-        int bedrooms = scanner.nextInt();
+        if (info == null) {
+            System.out.println("Invalid input");
+            return;
+        }
+        int bedrooms = readInt("Bedrooms: ");
 
-        System.out.print("Floor: ");
-        int floor = scanner.nextInt();
+
+        int floor = readInt("Floor: ");
+
 
         House apartment = new Apartment(
-                info.area,
-                info.region,
+                info.getArea(),
+                info.getRegion(),
                 "",
                 "",
-                info.sale,
-                info.rent,
+                info.isSale(),
+                info.isRent(),
                 bedrooms,
                 floor
         );
@@ -279,19 +340,24 @@ public class CLI {
 
         BaseHouseInfo info = getBaseInformation();
 
-        System.out.print("Yard Area: ");
-        double yard = scanner.nextDouble();
 
-        System.out.print("Floors: ");
-        int floors = scanner.nextInt();
+        if (info == null) {
+            System.out.println("Invalid input");
+            return;
+        }
+        double yard = readDouble("Yard Area: ");
+
+
+        int floors = readInt("Floors: ");
+
 
         House villa = new Villa(
-                info.area,
-                info.region,
+                info.getArea(),
+                info.getRegion(),
                 "",
                 "",
-                info.sale,
-                info.rent,
+                info.isSale(),
+                info.isRent(),
                 yard,
                 floors);
 
@@ -308,22 +374,24 @@ public class CLI {
 
         BaseHouseInfo info = getBaseInformation();
 
-        System.out.print("Terrace Area: ");
-        double terraceArea = scanner.nextDouble();
+        if (info == null) {
+            System.out.println("Invalid input");
+            return;
+        }
+        double terraceArea = readDouble("Terrace Area: ");
 
-        System.out.print("Has Pool? (Enter true for yes and false for no) ");
-        boolean hasPool = scanner.nextBoolean();
+        boolean hasPool = readBoolean("Has Pool? (Enter true for yes and false for no) ");
 
-        System.out.print("Floor Number: ");
-        int floorNumber = scanner.nextInt();
+
+        int floorNumber = readInt("Floor Number: ");
 
         House penthouse = new Penthouse(
-                info.area,
-                info.region,
+                info.getArea(),
+                info.getRegion(),
                 "",
                 "",
-                info.sale,
-                info.rent,
+                info.isSale(),
+                info.isRent(),
                 terraceArea,
                 hasPool,
                 floorNumber);
@@ -345,8 +413,20 @@ public class CLI {
         System.out.print("Password: ");
         String password = scanner.next();
 
-        System.out.print("Budget: ");
-        double budget = scanner.nextDouble();
+
+        double budget;
+
+        while (true) {
+
+            budget = readDouble("Budget: ");
+
+            if (budget >= 0) {
+                break;
+            }
+
+            System.out.println("Budget cannot be negative.");
+        }
+
 
         User user = system.signUp(username, password, budget);
 
@@ -372,9 +452,11 @@ public class CLI {
 
     private void buyHouse() {
 
-        System.out.println("House ID: ");
-        int houseId = scanner.nextInt();
+        int houseId = readInt("House ID: (0 to back) ");
 
+        if (backToPreviousMenu(houseId)) {
+            return;
+        }
 
         if (system.buyHouse(houseId, currentUser)) {
 
@@ -388,9 +470,11 @@ public class CLI {
 
     private void rentHouse() {
 
-        System.out.println("House ID: ");
-        int houseId = scanner.nextInt();
+        int houseId = readInt("House ID: (0 to back) ");
 
+        if (backToPreviousMenu(houseId)) {
+            return;
+        }
         if (system.rentHouse(houseId, currentUser)) {
             System.out.println("Yeahhh!");
         }   else {
@@ -399,9 +483,10 @@ public class CLI {
     }
 
     private void chooseHouse() {
-        System.out.println("Choose House: ");
-        int houseId = scanner.nextInt();
-
+        int houseId = readInt("Choose House: (0 to back) ");
+        if (backToPreviousMenu(houseId)) {
+            return;
+        }
         House house = system.findHouseById(houseId);
         if (house != null) {
             System.out.println(house);
@@ -434,22 +519,28 @@ public class CLI {
     }
 
     private void searchHouseById() {
-        System.out.println("House ID: ");
-        int houseId = scanner.nextInt();
 
+        int houseId = readInt("Choose House ID (0 to back): ");
+
+        if (backToPreviousMenu(houseId)) {
+            return;
+        }
         System.out.println(system.findHouseById(houseId));
     }
 
     private void instantSell() {
-        System.out.println("House ID:");
-        int id = scanner.nextInt();
-
+        int id = readInt("House ID: (0 to back) ");
+        if (backToPreviousMenu(id)) {
+            return;
+        }
         system.instantSellToAgency(currentUser.getId(), id);
     }
 
     private void specialBuy() {
-        System.out.println("House ID:");
-        int houseId = scanner.nextInt();
+        int houseId = readInt("House ID: (0 to back) ");
+        if (backToPreviousMenu(houseId)) {
+            return;
+        }
 
         system.specialBuy(currentUser.getId(), houseId);
     }
@@ -458,18 +549,41 @@ public class CLI {
 
         for (int id : currentUser.getContracts()) {
 
-            Contract c = system.findContractById(id);
-            System.out.println(c);
+            Contract myContract = system.findContractById(id);
+            System.out.println("ID: " + myContract.getContractId() + " seller id: " + myContract.getBuyerId() + " type: " + myContract.getType());
+            System.out.println("...........................");
 
+
+        }
+    }
+    private void chooseContract() {
+        int contractId = readInt("Choose contract: (0 to back)");
+
+        if (backToPreviousMenu(contractId)) {
+            return;
+        }
+        Contract contract = system.findContractById(contractId);
+
+        if (contract != null) {
+            if (contract.getBuyerId() != currentUser.getId() && contract.getSellerId() != currentUser.getId()) {
+                System.out.println("This contract is not Yours.");
+                return;
+            }
+            System.out.println(contract);
+        }  else {
+            System.out.println("This contract doesn't exist!");
         }
     }
 
     private void searchHouseByRegion() {
-        System.out.println("Region:");
-        int region = scanner.nextInt();
-
+        int region = readInt("enter Region number: (0 to back): ");
+        if (backToPreviousMenu(region)) {
+            return;
+        }
         if (region < 5 && region > 0) {
            system.showHousesByRegion(region);
+        }else{
+            System.out.println("Invalid Region!");
         }
     }
 
@@ -480,23 +594,99 @@ public class CLI {
     }
 
     private void cancelContract() {
-        System.out.println("Contract ID:");
-        int contractId = scanner.nextInt();
-
+        int contractId = readInt("Contract ID: (0 to back): ");
+        if (backToPreviousMenu(contractId)) {
+            return;
+        }
         system.cancelContract(contractId, currentUser);
     }
 
     private void saleHouse() {
-        System.out.println("House ID:");
-        int houseId = scanner.nextInt();
-
+        int houseId = readInt("House ID (0 to back): ");
+        if (backToPreviousMenu(houseId)) {
+            return;
+        }
         system.saleHouse(houseId, currentUser);
     }
 
     private void forRentHouse() {
-        System.out.println("House ID:");
-        int houseId = scanner.nextInt();
+        int houseId = readInt("House ID: (0 to back): ");
+
+        if (backToPreviousMenu(houseId)) {
+            return;
+        }
 
         system.forRentHouse(houseId, currentUser);
     }
+
+    private boolean backToPreviousMenu(int input) {
+        return input == 0;
+    }
+
+    private int readInt(String message) {
+
+        while (true) {
+
+            System.out.print(message);
+
+            if (scanner.hasNextInt()) {
+                return scanner.nextInt();
+            } else {
+                System.out.println("Invalid input. Please enter an integer.");
+                scanner.next();
+            }
+        }
+    }
+
+    private double readDouble(String message) {
+
+        while (true) {
+
+            System.out.print(message);
+
+            if (scanner.hasNextDouble()) {
+                return scanner.nextDouble();
+            } else {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.next();
+            }
+        }
+    }
+
+    private boolean readBoolean(String message) {
+
+        while (true) {
+
+            System.out.print(message);
+
+            String input = scanner.next().trim().toLowerCase();
+
+            if (input.equals("true")) {
+                return true;
+            }
+
+            if (input.equals("false")) {
+                return false;
+            }
+
+            System.out.println("Please enter true or false.");
+        }
+    }
+
+    private String readYesNo(String message) {
+
+        while (true) {
+
+            System.out.print(message);
+
+            String input = scanner.next().trim().toLowerCase();
+
+            if (input.equals("yes") || input.equals("no")) {
+                return input;
+            }
+
+            System.out.println("Please enter yes or no.");
+        }
+    }
+
 }

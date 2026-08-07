@@ -5,7 +5,7 @@ import model.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 public class RealEstateAgency implements Serializable {
 
@@ -15,14 +15,17 @@ public class RealEstateAgency implements Serializable {
 
     private ArrayList<User> users;
 
-    private ArrayList<Contract>  contracts;
+    private ArrayList<Contract> contracts;
 
-    private User agency;
 
     public RealEstateAgency() {
         houses = new ArrayList<>();
         users = new ArrayList<>();
         contracts = new ArrayList<>();
+    }
+
+    private User getPrivateAgency() {
+        return new User("Elnaz Queen", "", 0, "AGENCY");
     }
 
     public ArrayList<House> getHouses() {
@@ -52,9 +55,9 @@ public class RealEstateAgency implements Serializable {
     public void showAllHouses() {
         for (House house : houses) {
             //if (house.isForSale() || house.isForRent()) {
-                System.out.println("ID: " + house.getId() + " Region: " + house.getRegion() + " For Sale: " + house.isForSale() + " For Rent: " + house.isForRent() + " ");
-                System.out.printf("Price: %.0f\n", house.calculatePrice());
-                System.out.println("...........................");
+            System.out.println("ID: " + house.getId() + " Region: " + house.getRegion() + " For Sale: " + house.isForSale() + " For Rent: " + house.isForRent() + " ");
+            System.out.printf("Price: %.0f\n", house.calculatePrice());
+            System.out.println("...........................");
             //}
         }
     }
@@ -71,15 +74,15 @@ public class RealEstateAgency implements Serializable {
     public void showHousesForRent() {
         for (House house : houses) {
             if (house.isForRent()) {
-                System.out.println("ID: " + house.getId() + " Region: " + house.getRegion() + " For Sale: " + house.isForSale() + " For Rent: " + house.isForRent()+ " ");
-                System.out.printf("Price: %.0f\n", house.calculatePrice());
+                System.out.println("ID: " + house.getId() + " Region: " + house.getRegion() + " For Sale: " + house.isForSale() + " For Rent: " + house.isForRent() + " ");
+                System.out.printf("Price: %.0f\n", house.calculateMonthlyRent());
             }
         }
     }
 
-    public void showHousesByRegion(int region)  {
+    public void showHousesByRegion(int region) {
         for (House house : houses) {
-            if(house.getRegion() == region) {
+            if (house.getRegion() == region) {
                 System.out.println(house);
             }
         }
@@ -89,14 +92,14 @@ public class RealEstateAgency implements Serializable {
         if (houses.isEmpty()) {
             return;
         }
-        House mostExpensive = houses.get(0);
+        House mostExpensive = houses.getFirst();
         for (House house : houses) {
             if (house.calculatePrice() > mostExpensive.calculatePrice()) {
                 mostExpensive = house;
             }
         }
         System.out.println("Most Expensive House: " + mostExpensive);
-        System.out.printf("Price: %f0\n" + mostExpensive.calculatePrice());
+        System.out.printf("Price: %.0f\n", mostExpensive.calculatePrice());
     }
 
     public House findHouseById(int id) {
@@ -112,7 +115,7 @@ public class RealEstateAgency implements Serializable {
         return null;
     }
 
-    public void showHouseById(int id)  {
+    public void showHouseById(int id) {
 
         House house = findHouseById(id);
 
@@ -169,7 +172,7 @@ public class RealEstateAgency implements Serializable {
             return null;
         }
 
-        if (user.getRole() == UserRole.AGENCY) {
+        if (user.getRole().equals(UserRole.AGENCY)) {
             System.out.println("Agency cannot log in.");
             return null;
         }
@@ -292,11 +295,7 @@ public class RealEstateAgency implements Serializable {
         house.setForRent(false);
 
         User owner = findUserByUsername(house.getOwnerName());
-        int ownerId = -1;
-
-        if (owner != null) {
-            ownerId = owner.getId();
-        }
+        int ownerId = owner.getId();
 
         Contract contract = new Contract(
                 house.getId(),
@@ -308,15 +307,16 @@ public class RealEstateAgency implements Serializable {
 
         contracts.add(contract);
 
-        if (owner != null && owner.getRole() != UserRole.AGENCY) {
+        if (!Objects.equals(owner.getRole(), UserRole.AGENCY)) {
             owner.setBudget(owner.getBudget() + rentPrice);
         }
 
         renter.addContract(contract.getContractId());
 
-        if (owner != null) {
-            owner.addContract(contract.getContractId());
-        }
+
+        owner.addContract(contract.getContractId());
+
+
 
 
         System.out.println("House rented successfully.");
@@ -393,14 +393,7 @@ public class RealEstateAgency implements Serializable {
 
     public User findAgencyUser() {
 
-        for (User user : users) {
-
-            if (user.getRole() == UserRole.AGENCY) {
-                return user;
-            }
-        }
-
-        return null;
+        return getPrivateAgency();
     }
 
     public boolean specialBuy(int buyerId, int houseId) {
@@ -470,8 +463,8 @@ public class RealEstateAgency implements Serializable {
 
     public void cancelContract(int contractId, User user) {
 
-        Contract c =  findContractById(contractId);
-        if (c.getType() != ContractType.RENT) {
+        Contract c = findContractById(contractId);
+        if (!c.getType().equals(ContractType.RENT)) {
             System.out.println("You can't cancel this contract!");
             return;
         }
@@ -512,7 +505,7 @@ public class RealEstateAgency implements Serializable {
             System.out.println("House not found.");
             return;
         }
-        if (house.getOwnerName() != user.getUsername()) {
+        if (!house.getOwnerName().equals(user.getUsername())) {
             System.out.println("This House is not Yours.");
             return;
         }
@@ -527,7 +520,7 @@ public class RealEstateAgency implements Serializable {
             System.out.println("House not found.");
             return;
         }
-        if (house.getOwnerName() != user.getUsername()) {
+        if (!house.getOwnerName().equals(user.getUsername())) {
             System.out.println("This House is not Yours.");
             return;
         }

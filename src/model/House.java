@@ -32,7 +32,7 @@ public abstract class House implements Serializable {
     public int getId() { return id; }
     public double getArea() { return area; }
     public int getRegion() { return region; }
-    public String getOwnerName() { return ownerName; }
+    public String  getOwnerName() { return ownerName; }
     public String getRenterName() { return renterName; }
     public boolean isForSale() { return forSale; }
     public boolean isForRent() { return forRent; }
