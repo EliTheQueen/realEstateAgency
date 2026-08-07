@@ -24,7 +24,11 @@ public class User implements Serializable {
     private List<Integer> contracts;
 
     public User(String username, String password, double budget, String role) {
-        this.id = nextId++;
+        if (role.equals("AGENCY")) {
+            this.id = 0;
+        } else {
+            this.id = nextId++;
+        }
         this.username = username;
         this.passwordHash = HashUtil.hashPassword(password);
         this.role = role;
